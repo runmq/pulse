@@ -10,7 +10,5 @@ export class QueueDetailsDto extends QueueSummaryDto {
     maxRetries: number | null;
     description: string;
   };
-  dlqMessageCount: number;
-  retryQueueMessageCount: number;
   shovelPluginEnabled: boolean;
 }

@@ -9,4 +9,6 @@ export class QueueSummaryDto {
   retriesEnabled: boolean;
   dlqEnabled: boolean;
   isRunMQManaged: boolean;
+  retryQueueMessageCount: number;
+  dlqMessageCount: number;
 }

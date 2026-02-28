@@ -35,9 +35,15 @@ export class QueueManagementService {
       mainQueues.map(async (queue) => {
         const processorName =
           this.metadataService.extractProcessorName(queue.name);
-        const [retriesEnabled, dlqEnabled] = await Promise.all([
+        const [retriesEnabled, dlqEnabled, retryQueue, dlqQueue] = await Promise.all([
           this.rabbitmqService.areRetriesEnabled(processorName),
           this.rabbitmqService.isDLQEnabled(processorName),
+          this.rabbitmqService
+            .getQueue(`${Constants.RETRY_DELAY_QUEUE_PREFIX}${processorName}`)
+            .catch(() => null),
+          this.rabbitmqService
+            .getQueue(`${Constants.DLQ_QUEUE_PREFIX}${processorName}`)
+            .catch(() => null),
         ]);
 
         return {
@@ -51,6 +57,8 @@ export class QueueManagementService {
           retriesEnabled,
           dlqEnabled,
           isRunMQManaged: true,
+          retryQueueMessageCount: retryQueue?.messages || 0,
+          dlqMessageCount: dlqQueue?.messages || 0,
         } as QueueSummaryDto;
       }),
     );

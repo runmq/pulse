@@ -9,6 +9,8 @@ export interface QueueSummary {
   retriesEnabled: boolean;
   dlqEnabled: boolean;
   isRunMQManaged: boolean;
+  retryQueueMessageCount: number;
+  dlqMessageCount: number;
 }
 
 export interface QueueDetails extends QueueSummary {
@@ -21,8 +23,6 @@ export interface QueueDetails extends QueueSummary {
     maxRetries: number | null;
     description: string;
   };
-  dlqMessageCount: number;
-  retryQueueMessageCount: number;
   shovelPluginEnabled: boolean;
 }
 
