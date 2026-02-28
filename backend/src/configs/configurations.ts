@@ -21,7 +21,7 @@ export interface AppConfig {
 // so required fields like JWT_SECRET are guaranteed to exist.
 export default (): AppConfig => ({
   port: parseInt(process.env.PORT ?? '3001', 10),
-  corsOrigin: process.env.CORS_ORIGIN ?? 'http://localhost:3000',
+  corsOrigin: process.env.CORS_ORIGIN ?? 'http://localhost:3002',
   jwt: {
     secret: process.env.JWT_SECRET!,
     expiresIn: process.env.JWT_EXPIRES_IN ?? '24h',

@@ -2,7 +2,7 @@ import * as Joi from 'joi';
 
 const configsSchema = Joi.object({
   PORT: Joi.number().default(3001),
-  CORS_ORIGIN: Joi.string().default('http://localhost:3000'),
+  CORS_ORIGIN: Joi.string().default('http://localhost:3002'),
   JWT_SECRET: Joi.string().required(),
   JWT_EXPIRES_IN: Joi.string().default('24h'),
   RABBITMQ_HOST: Joi.string().default('localhost'),
