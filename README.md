@@ -31,8 +31,8 @@ Web-based monitoring and management dashboard for [RunMQ](https://github.com/run
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/runmq/Dashboard.git
-cd Dashboard
+git clone https://github.com/runmq/pulse.git
+cd pulse
 ```
 
 2. Update the environment variables in `docker-compose.yml` to point to your RabbitMQ instance:
