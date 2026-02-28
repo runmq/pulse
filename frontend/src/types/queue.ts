@@ -35,6 +35,7 @@ export interface DLQMessage {
   exchange: string;
   redelivered: boolean;
   properties: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     headers: Record<string, any>;
     contentType?: string;
   };

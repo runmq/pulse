@@ -1,0 +1,25 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      RABBITMQ_HOST: localhost
+      RABBITMQ_PORT: 15672
+      RABBITMQ_MANAGEMENT_USER: guest
+      RABBITMQ_MANAGEMENT_PASSWORD: guest
+      RABBITMQ_VHOST: /
+      JWT_SECRET: change-me-in-production
+      JWT_EXPIRES_IN: 24h
+      USERS_CONFIG_PATH: ./config/users.json
+      CORS_ORIGIN: http://localhost:3000
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+    depends_on:
+      - backend

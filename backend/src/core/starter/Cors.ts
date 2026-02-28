@@ -7,7 +7,7 @@ const configureCors = (app: INestApplication) => {
   const corsOrigin = configService.get('corsOrigin', { infer: true });
 
   app.enableCors({
-    origin: corsOrigin || 'http://localhost:3000',
+    origin: corsOrigin,
     credentials: true,
     allowedHeaders: 'Authorization, Content-Type, Accept',
     methods: 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
