@@ -8,10 +8,10 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcryptjs';
 import * as fs from 'fs';
-import * as path from 'path';
 import { User } from './interfaces/user.interface';
 import { LoginDto } from './dto/login.dto';
 import { AuthResponseDto } from './dto/auth-response.dto';
+import { AppConfig } from '../configs';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -20,7 +20,7 @@ export class AuthService implements OnModuleInit {
 
   constructor(
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService<AppConfig>,
   ) {}
 
   onModuleInit() {
@@ -31,10 +31,9 @@ export class AuthService implements OnModuleInit {
    * Load users from JSON config file
    */
   private loadUsers(): void {
-    const configPath = this.configService.get<string>(
-      'USERS_CONFIG_PATH',
-      path.join(process.cwd(), 'config', 'users.json'),
-    );
+    const configPath = this.configService.get('usersConfigPath', {
+      infer: true,
+    })!;
 
     try {
       const fileContent = fs.readFileSync(configPath, 'utf-8');
