@@ -2,12 +2,16 @@ import { Module, Scope } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module.js';
+import { RabbitMQModule } from './rabbitmq/rabbitmq.module.js';
+import { QueueManagementModule } from './queue-management/queue-management.module.js';
 import LoggingInterceptor from 'core/interceptors/logging.interceptor';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
+    RabbitMQModule,
+    QueueManagementModule,
   ],
   providers: [
     {

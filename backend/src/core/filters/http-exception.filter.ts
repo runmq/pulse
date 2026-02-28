@@ -19,10 +19,16 @@ export default class HttpExceptionFilter implements ExceptionFilter {
     const status =
       exception instanceof HttpException ? exception.getStatus() : 500;
 
-    const message =
-      exception instanceof HttpException
-        ? exception.message
-        : 'Internal server error';
+    let message: string | string[] = 'Internal server error';
+    if (exception instanceof HttpException) {
+      const exceptionResponse = exception.getResponse();
+      if (typeof exceptionResponse === 'object' && exceptionResponse !== null) {
+        const resp = exceptionResponse as Record<string, unknown>;
+        message = (resp.message as string | string[]) || exception.message;
+      } else {
+        message = exception.message;
+      }
+    }
 
     if (status >= 500) {
       this.logger.error(
@@ -30,7 +36,7 @@ export default class HttpExceptionFilter implements ExceptionFilter {
         exception instanceof Error ? exception.stack : undefined,
       );
     } else {
-      this.logger.warn(`[${request.method}] ${request.url} - ${status}: ${message}`);
+      this.logger.warn(`[${request.method}] ${request.url} - ${status}: ${Array.isArray(message) ? message.join(', ') : message}`);
     }
 
     response.status(status).json({
