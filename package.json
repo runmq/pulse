@@ -1,0 +1,14 @@
+{
+  "name": "dashboard",
+  "version": "1.0.0",
+  "description": "RunMQ Dashboard is a web-based application that provides realtime monitoring and management capabilities for RunMQ.  It offers an intuitive interface to visualize performance, queues, DLQs and manage various aspects of RunMQ.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
