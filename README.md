@@ -14,14 +14,17 @@ Web-based monitoring and management dashboard for [RunMQ](https://github.com/run
 
 ## Screenshots
 
-_Coming soon_
+<img width="998" height="1155" alt="Screenshot 2026-02-28 at 22 21 01" src="https://github.com/user-attachments/assets/127ee72c-9d49-4d9d-8156-026566e07806" />
+
+<img width="999" height="1156" alt="Screenshot 2026-02-28 at 22 24 47" src="https://github.com/user-attachments/assets/c37e810d-0033-47af-b1d1-78513b00c4dc" />
+
 
 ## Getting Started
 
 ### Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
-- A running [RabbitMQ](https://www.rabbitmq.com/) instance with the **Management Plugin** enabled
+- A running [RabbitMQ](https://www.rabbitmq.com/) instance with the **Management & Shovel Plugins** enabled
 
 ### Setup
 
