@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { QueueSummary } from '@/types/queue';
-import { formatNumber } from '@/lib/utils';
+import { formatCompactNumber } from '@/lib/utils';
 import { ArrowUpRight } from 'lucide-react';
 
 interface Props {
@@ -30,23 +30,23 @@ export default function QueueCard({ queue }: Props) {
         <div className="grid grid-cols-5 gap-x-3">
           <div>
             <p className="text-xs text-muted-foreground">Total</p>
-            <p className="text-lg font-semibold tabular-nums">{formatNumber(queue.messages)}</p>
+            <p className="text-lg font-semibold tabular-nums">{formatCompactNumber(queue.messages)}</p>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Ready</p>
-            <p className="text-lg font-semibold tabular-nums">{formatNumber(queue.messagesReady)}</p>
+            <p className="text-lg font-semibold tabular-nums">{formatCompactNumber(queue.messagesReady)}</p>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Unacked</p>
-            <p className="text-lg font-semibold tabular-nums">{formatNumber(queue.messagesUnacknowledged)}</p>
+            <p className="text-lg font-semibold tabular-nums">{formatCompactNumber(queue.messagesUnacknowledged)}</p>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Retry</p>
-            <p className={`text-lg font-semibold tabular-nums ${queue.retryQueueMessageCount > 0 ? 'text-amber-500' : ''}`}>{formatNumber(queue.retryQueueMessageCount)}</p>
+            <p className={`text-lg font-semibold tabular-nums ${queue.retryQueueMessageCount > 0 ? 'text-amber-500' : ''}`}>{formatCompactNumber(queue.retryQueueMessageCount)}</p>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">DLQ</p>
-            <p className={`text-lg font-semibold tabular-nums ${queue.dlqMessageCount > 0 ? 'text-red-500' : ''}`}>{formatNumber(queue.dlqMessageCount)}</p>
+            <p className={`text-lg font-semibold tabular-nums ${queue.dlqMessageCount > 0 ? 'text-red-500' : ''}`}>{formatCompactNumber(queue.dlqMessageCount)}</p>
           </div>
         </div>
 
