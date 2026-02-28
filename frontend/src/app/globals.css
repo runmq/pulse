@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 228 33% 97%;
+    --foreground: 0 0% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 9%;
+    --border: 0 0% 90%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 240 20% 4%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 95%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 55%;
+    --accent: 0 0% 10%;
+    --accent-foreground: 0 0% 95%;
+    --border: 0 0% 14%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply text-foreground min-h-screen antialiased;
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fc 40%, #f3f4f8 70%, #ffffff 100%);
+    background-attachment: fixed;
+  }
+
+  .dark body {
+    background: linear-gradient(145deg, #0a0a0f 0%, #0d0d12 40%, #0f0e14 70%, #0a0a0f 100%);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white dark:bg-[#0a0a0a];
+    @apply border border-gray-200 dark:border-[#1a1a1a];
+    @apply rounded-xl;
+  }
+
+  .glass-button {
+    @apply bg-gray-100 dark:bg-[#171717];
+    @apply border border-gray-200 dark:border-[#252525];
+    @apply rounded-lg;
+    @apply px-4 py-2;
+    @apply transition-all duration-150;
+    @apply hover:bg-gray-200 dark:hover:bg-[#222];
+    @apply active:scale-[0.97];
+  }
+
+  .glass-input {
+    @apply bg-gray-50 dark:bg-[#0a0a0a];
+    @apply border border-gray-200 dark:border-[#252525];
+    @apply rounded-lg;
+    @apply px-4 py-2;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50;
+    @apply transition-all duration-150;
+    @apply placeholder:text-gray-400 dark:placeholder:text-[#555];
+  }
+
+  .badge {
+    @apply inline-flex items-center;
+    @apply px-2.5 py-0.5;
+    @apply rounded-full;
+    @apply text-xs font-medium;
+  }
+
+  .badge-success {
+    @apply bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400;
+  }
+
+  .badge-error {
+    @apply bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400;
+  }
+
+  .badge-warning {
+    @apply bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400;
+  }
+
+  .badge-info {
+    @apply bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-[#333];
+  @apply rounded-full;
+  @apply hover:bg-gray-400 dark:hover:bg-[#444];
+}
