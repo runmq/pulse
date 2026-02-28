@@ -1,0 +1,11 @@
+const RUNMQ_PREFIX = "_runmq_";
+
+export const Constants = {
+  ROUTER_EXCHANGE_NAME: RUNMQ_PREFIX + "router",
+  DEAD_LETTER_ROUTER_EXCHANGE_NAME: RUNMQ_PREFIX + "dead_letter_router",
+  RETRY_DELAY_QUEUE_PREFIX: RUNMQ_PREFIX + "retry_delay_",
+  DLQ_QUEUE_PREFIX: RUNMQ_PREFIX + "dlq_",
+  MESSAGE_TTL_OPERATOR_POLICY_PREFIX: RUNMQ_PREFIX + "message_ttl_operator_policy",
+  METADATA_STORE_PREFIX: RUNMQ_PREFIX + "metadata_",
+  REPROCESS_SHOVEL_PREFIX: RUNMQ_PREFIX + "reprocess_",
+};
