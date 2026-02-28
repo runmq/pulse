@@ -1,8 +1,8 @@
 services:
   backend:
+    container_name: runmq_dashboard_backend
     build: ./backend
-    ports:
-      - "3001:3001"
+    network_mode: host
     environment:
       PORT: 3001
       RABBITMQ_HOST: localhost
@@ -14,12 +14,17 @@ services:
       JWT_EXPIRES_IN: 24h
       USERS_CONFIG_PATH: ./config/users.json
       CORS_ORIGIN: http://localhost:3000
+    volumes:
+      - users_data:/app/config
 
   frontend:
+    container_name: runmq_dashboard_frontend
     build: ./frontend
-    ports:
-      - "3000:3000"
+    network_mode: host
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:3001
     depends_on:
       - backend
+
+volumes:
+  users_data:

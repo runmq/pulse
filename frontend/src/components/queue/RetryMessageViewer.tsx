@@ -152,7 +152,6 @@ export default function RetryMessageViewer({ processorName, messageCount }: Prop
                           #{msg.index}
                         </span>
                         <span className="text-sm font-mono truncate flex-1 text-muted-foreground">
-                          {msg.routingKey || msg.exchange || '\u2014'}
                         </span>
                         <span className="text-xs text-muted-foreground shrink-0">
                           {formatBytes(msg.payloadBytes)}
