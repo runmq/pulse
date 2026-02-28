@@ -64,7 +64,7 @@ describe('AuthService', () => {
     it('should return user for valid credentials', async () => {
       const user = await service.validateUser('admin', 'admin123');
       expect(user).toBeDefined();
-      expect(user.username).toBe('admin');
+      expect(user!.username).toBe('admin');
     });
 
     it('should return null for invalid username', async () => {
@@ -106,7 +106,7 @@ describe('AuthService', () => {
     it('should return user for valid payload', async () => {
       const user = await service.validateJwtPayload({ sub: '1' });
       expect(user).toBeDefined();
-      expect(user.username).toBe('admin');
+      expect(user!.username).toBe('admin');
     });
 
     it('should return null for invalid payload', async () => {
@@ -119,7 +119,7 @@ describe('AuthService', () => {
     it('should return user by id', () => {
       const user = service.getUserById('1');
       expect(user).toBeDefined();
-      expect(user.username).toBe('admin');
+      expect(user!.username).toBe('admin');
     });
 
     it('should return null for unknown id', () => {
