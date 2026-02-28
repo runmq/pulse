@@ -1,4 +1,4 @@
-# RunMQ Dashboard
+# RunMQ Pulse
 
 Web-based monitoring and management dashboard for [RunMQ](https://github.com/runmq) message queues.
 
