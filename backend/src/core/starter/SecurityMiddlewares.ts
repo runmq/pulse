@@ -6,8 +6,8 @@ const SecurityMiddlewares = (app: NestExpressApplication) => {
   app.use(helmet());
   app.use(
     rateLimit({
-      windowMs: 60 * 1000, // 5 minutes
-      max: 1000, // limit each IP to 100 requests per windowMs
+      windowMs: 60 * 1000, // 1 minute
+      max: 1000, // limit each IP to 1000 requests per window
     }),
   );
 };

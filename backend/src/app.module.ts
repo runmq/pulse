@@ -5,10 +5,15 @@ import { AuthModule } from './auth/auth.module.js';
 import { RabbitMQModule } from './rabbitmq/rabbitmq.module.js';
 import { QueueManagementModule } from './queue-management/queue-management.module.js';
 import LoggingInterceptor from 'core/interceptors/logging.interceptor';
+import { configurations, configsSchema } from './configs';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configurations],
+      validationSchema: configsSchema,
+    }),
     AuthModule,
     RabbitMQModule,
     QueueManagementModule,
