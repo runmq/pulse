@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { Lock, User, Eye, EyeOff, Sun, Moon } from 'lucide-react';
+import { Lock, User, Eye, EyeOff, Sun, Moon, Loader2 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 
 export default function LoginPage() {
@@ -23,7 +23,11 @@ export default function LoginPage() {
   }, [user, authLoading, router]);
 
   if (authLoading || user) {
-    return <div className="min-h-screen" />;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+      </div>
+    );
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -49,7 +53,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center p-4 relative">
       <button
         onClick={toggleTheme}
-        className="absolute top-4 right-4 p-2 rounded-lg text-gray-500 dark:text-[#636E7E] hover:text-gray-700 dark:hover:text-[#999] hover:bg-gray-100 dark:hover:bg-[#111] transition-colors"
+        className="absolute top-4 right-4 p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-gray-100 dark:hover:bg-[#111] transition-colors"
       >
         {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
       </button>
@@ -64,7 +68,7 @@ export default function LoginPage() {
           <h1 className="text-xl font-semibold tracking-tight">
             Sign in to RunMQ Pulse
           </h1>
-          <p className="text-sm text-gray-500 dark:text-[#636E7E] mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Manage & Monitor your queues
           </p>
         </div>
@@ -72,7 +76,7 @@ export default function LoginPage() {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="username" className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-[#999]">
+            <label htmlFor="username" className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-400">
               Username
             </label>
             <div className="relative">
@@ -94,7 +98,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-[#999]">
+            <label htmlFor="password" className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-400">
               Password
             </label>
             <div className="relative">

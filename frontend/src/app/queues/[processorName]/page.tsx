@@ -12,8 +12,14 @@ import QueueTopology from '@/components/queue/QueueTopology';
 import RetryToggle from '@/components/queue/RetryToggle';
 import DLQToggle from '@/components/queue/DLQToggle';
 import ReprocessDLQButton from '@/components/queue/ReprocessDLQButton';
+import ClearDLQButton from '@/components/queue/ClearDLQButton';
+import DLQMessageViewer from '@/components/queue/DLQMessageViewer';
+import RetryMessageViewer from '@/components/queue/RetryMessageViewer';
 import RetryDelayControl from '@/components/queue/RetryDelayControl';
-import { Loader2, ArrowLeft, RefreshCw } from 'lucide-react';
+import RefreshSelect from '@/components/ui/RefreshSelect';
+import { useActionRefresh } from '@/hooks/useActionRefresh';
+import { useRefreshInterval } from '@/hooks/useRefreshInterval';
+import { Loader2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
 interface Props {
@@ -27,6 +33,9 @@ export default function QueueDetailsPage({ params }: Props) {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
 
+  const { actionPending, scheduleRefresh } = useActionRefresh();
+  const { intervalSeconds, refreshInterval, setIntervalSeconds } = useRefreshInterval();
+
   const {
     data: queue,
     error,
@@ -34,7 +43,8 @@ export default function QueueDetailsPage({ params }: Props) {
     mutate,
   } = useSWR<QueueDetails>(
     user ? `/queues/${processorName}` : null,
-    () => api.getQueueDetails(processorName)
+    () => api.getQueueDetails(processorName),
+    { refreshInterval }
   );
 
   useEffect(() => {
@@ -59,7 +69,7 @@ export default function QueueDetailsPage({ params }: Props) {
         {/* Back */}
         <Link
           href="/queues"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-[#636E7E] hover:text-foreground transition-colors mb-6"
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Queues
@@ -92,21 +102,19 @@ export default function QueueDetailsPage({ params }: Props) {
                   <span className={`text-xs ${queue.state === 'running' ? 'text-emerald-500' : 'text-amber-500'}`}>
                     {queue.state}
                   </span>
-                  <span className="text-[#333] dark:text-[#555]">&middot;</span>
-                  <span className="text-xs text-gray-500 dark:text-[#636E7E]">
+                  <span className="text-muted-foreground">&middot;</span>
+                  <span className="text-xs text-muted-foreground">
                     {queue.consumers} consumer{queue.consumers !== 1 ? 's' : ''}
                   </span>
                 </div>
               </div>
 
-              <button
-                onClick={() => mutate()}
-                className="glass-button flex items-center gap-2 text-sm h-9 px-3"
-                disabled={isLoading}
-              >
-                <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? 'animate-spin' : ''}`} />
-                Refresh
-              </button>
+              <RefreshSelect
+                intervalSeconds={intervalSeconds}
+                onIntervalChange={setIntervalSeconds}
+                onRefresh={() => mutate()}
+                loading={isLoading}
+              />
             </div>
 
             {/* Metrics */}
@@ -117,31 +125,58 @@ export default function QueueDetailsPage({ params }: Props) {
 
             {/* Controls */}
             <div className="glass-card p-5">
-              <h2 className="text-sm font-medium text-gray-500 dark:text-[#636E7E] uppercase tracking-wider mb-4">Controls</h2>
+              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4">Controls</h2>
 
               <div className="space-y-1">
                 <RetryToggle
                   processorName={queue.processorName}
                   enabled={queue.retriesEnabled}
-                  onToggle={mutate}
+                  onToggle={() => scheduleRefresh(mutate)}
+                  disabled={actionPending}
                 />
                 <DLQToggle
                   processorName={queue.processorName}
                   enabled={queue.dlqEnabled}
-                  onToggle={mutate}
+                  onToggle={() => scheduleRefresh(mutate)}
+                  disabled={actionPending}
                 />
                 <RetryDelayControl
                   processorName={queue.processorName}
                   currentDelay={queue.retryDelay}
-                  onUpdate={mutate}
+                  onUpdate={() => scheduleRefresh(mutate)}
+                  disabled={actionPending}
                 />
                 <ReprocessDLQButton
                   processorName={queue.processorName}
                   messageCount={queue.dlqMessageCount}
                   shovelPluginEnabled={queue.shovelPluginEnabled}
+                  disabled={actionPending}
+                  onReprocess={() => scheduleRefresh(mutate)}
+                />
+                <ClearDLQButton
+                  processorName={queue.processorName}
+                  messageCount={queue.dlqMessageCount}
+                  onClear={() => scheduleRefresh(mutate)}
+                  disabled={actionPending}
                 />
               </div>
             </div>
+
+            {/* Retry Message Viewer */}
+            {queue.retriesEnabled && (
+              <RetryMessageViewer
+                processorName={queue.processorName}
+                messageCount={queue.retryQueueMessageCount}
+              />
+            )}
+
+            {/* DLQ Message Viewer */}
+            {queue.dlqEnabled && (
+              <DLQMessageViewer
+                processorName={queue.processorName}
+                messageCount={queue.dlqMessageCount}
+              />
+            )}
 
           </div>
         )}

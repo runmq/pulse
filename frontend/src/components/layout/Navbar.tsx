@@ -27,7 +27,7 @@ export default function Navbar() {
           <div className="flex items-center gap-1">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-md text-gray-500 dark:text-[#636E7E] hover:text-foreground hover:bg-gray-100 dark:hover:bg-[#111] transition-colors"
+              className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-gray-100 dark:hover:bg-[#111] transition-colors"
               aria-label="Toggle theme"
             >
               {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -35,12 +35,12 @@ export default function Navbar() {
 
             {user && (
               <>
-                <span className="hidden sm:block text-xs text-gray-500 dark:text-[#636E7E] ml-2 mr-1">
+                <span className="hidden sm:block text-xs text-muted-foreground ml-2 mr-1">
                   {user.username}
                 </span>
                 <button
                   onClick={logout}
-                  className="p-2 rounded-md text-gray-500 dark:text-[#636E7E] hover:text-red-500 hover:bg-gray-100 dark:hover:bg-[#111] transition-colors"
+                  className="p-2 rounded-md text-muted-foreground hover:text-red-500 hover:bg-gray-100 dark:hover:bg-[#111] transition-colors"
                   aria-label="Logout"
                 >
                   <LogOut className="h-4 w-4" />

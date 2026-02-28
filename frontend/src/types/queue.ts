@@ -25,3 +25,17 @@ export interface QueueDetails extends QueueSummary {
   retryQueueMessageCount: number;
   shovelPluginEnabled: boolean;
 }
+
+export interface DLQMessage {
+  index: number;
+  payload: string;
+  payloadEncoding: string;
+  payloadBytes: number;
+  routingKey: string;
+  exchange: string;
+  redelivered: boolean;
+  properties: {
+    headers: Record<string, any>;
+    contentType?: string;
+  };
+}

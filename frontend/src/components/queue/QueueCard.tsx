@@ -29,11 +29,11 @@ export default function QueueCard({ queue }: Props) {
         {/* Stats */}
         <div className="grid grid-cols-2 gap-x-4 gap-y-2">
           <div>
-            <p className="text-xs text-gray-500 dark:text-[#636E7E]">Messages</p>
+            <p className="text-xs text-muted-foreground">Messages</p>
             <p className="text-lg font-semibold tabular-nums">{formatNumber(queue.messages)}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-500 dark:text-[#636E7E]">Consumers</p>
+            <p className="text-xs text-muted-foreground">Consumers</p>
             <p className="text-lg font-semibold tabular-nums">{formatNumber(queue.consumers)}</p>
           </div>
         </div>
@@ -41,12 +41,12 @@ export default function QueueCard({ queue }: Props) {
         {/* Tags */}
         <div className="flex items-center gap-2 mt-4 pt-3 border-t border-gray-100 dark:border-[#1a1a1a]">
           {queue.retriesEnabled && (
-            <span className="text-[11px] text-gray-500 dark:text-[#555] bg-gray-100 dark:bg-[#111] px-2 py-0.5 rounded">
+            <span className="text-[11px] text-gray-500 dark:text-[#555555] bg-gray-100 dark:bg-[#111] px-2 py-0.5 rounded">
               retries
             </span>
           )}
           {queue.dlqEnabled && (
-            <span className="text-[11px] text-gray-500 dark:text-[#555] bg-gray-100 dark:bg-[#111] px-2 py-0.5 rounded">
+            <span className="text-[11px] text-gray-500 dark:text-[#555555] bg-gray-100 dark:bg-[#111] px-2 py-0.5 rounded">
               dlq
             </span>
           )}

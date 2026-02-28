@@ -2,17 +2,21 @@
 
 import { useState } from 'react';
 import { api } from '@/lib/api';
+import { useToast } from '@/contexts/ToastContext';
 
 interface Props {
   processorName: string;
   enabled: boolean;
   onToggle: () => void;
+  disabled?: boolean;
 }
 
-export default function DLQToggle({ processorName, enabled, onToggle }: Props) {
+export default function DLQToggle({ processorName, enabled, onToggle, disabled: externalDisabled }: Props) {
   const [loading, setLoading] = useState(false);
+  const toast = useToast();
 
   const handleToggle = async () => {
+    if (externalDisabled) return;
     setLoading(true);
     try {
       if (enabled) {
@@ -20,9 +24,13 @@ export default function DLQToggle({ processorName, enabled, onToggle }: Props) {
       } else {
         await api.enableDlq(processorName);
       }
+      toast.success(`Dead letter queue ${enabled ? 'disabled' : 'enabled'}`);
       onToggle();
-    } catch {
-      // SWR will refresh
+    } catch (err: unknown) {
+      const msg = err && typeof err === 'object' && 'message' in err
+        ? String((err as { message: string }).message)
+        : 'Failed to update DLQ';
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -32,16 +40,16 @@ export default function DLQToggle({ processorName, enabled, onToggle }: Props) {
     <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-[#1a1a1a] last:border-0">
       <div>
         <p className="text-sm font-medium">Dead Letter Queue</p>
-        <p className="text-xs text-gray-500 dark:text-[#636E7E]">
+        <p className="text-xs text-muted-foreground">
           Route failed messages to DLQ for inspection after exhausting all retries.
         </p>
       </div>
       <button
         onClick={handleToggle}
-        disabled={loading}
+        disabled={loading || externalDisabled}
         className={`relative w-9 h-5 rounded-full transition-colors duration-150 ${
           enabled ? 'bg-emerald-500' : 'bg-gray-300 dark:bg-[#333]'
-        } ${loading ? 'opacity-50' : ''}`}
+        } ${(loading || externalDisabled) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
       >
         <span
           className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-150 ${

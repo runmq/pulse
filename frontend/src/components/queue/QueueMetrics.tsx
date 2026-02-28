@@ -12,15 +12,16 @@ export default function QueueMetrics({ queue }: Props) {
     { label: 'Total', value: queue.messages },
     { label: 'Ready', value: queue.messagesReady },
     { label: 'Unacked', value: queue.messagesUnacknowledged },
-    { label: 'DLQ', value: queue.dlqMessageCount, alert: queue.dlqMessageCount > 0 },
+    { label: 'Retry', value: queue.retryQueueMessageCount, alert: queue.retryQueueMessageCount > 0, alertColor: 'text-amber-500' },
+    { label: 'DLQ', value: queue.dlqMessageCount, alert: queue.dlqMessageCount > 0, alertColor: 'text-red-500' },
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
       {metrics.map((m) => (
         <div key={m.label} className="glass-card p-4">
-          <p className="text-xs text-gray-500 dark:text-[#636E7E] mb-1">{m.label}</p>
-          <p className={`text-2xl font-semibold tabular-nums ${m.alert ? 'text-red-500' : ''}`}>
+          <p className="text-xs text-muted-foreground mb-1">{m.label}</p>
+          <p className={`text-2xl font-semibold tabular-nums ${m.alert ? m.alertColor : ''}`}>
             {formatNumber(m.value)}
           </p>
         </div>

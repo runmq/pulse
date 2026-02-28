@@ -1,4 +1,4 @@
-import { QueueSummary, QueueDetails } from '@/types/queue';
+import { QueueSummary, QueueDetails, DLQMessage } from '@/types/queue';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -104,6 +104,26 @@ class ApiClient {
     return this.request<ApiMessage & { shovelName: string }>(
       `/queues/${encodeURIComponent(processorName)}/reprocess`,
       { method: 'POST' }
+    );
+  }
+
+  // DLQ Messages
+  async clearDlq(processorName: string) {
+    return this.request<ApiMessage & { processorName: string }>(
+      `/queues/${encodeURIComponent(processorName)}/dlq/messages`,
+      { method: 'DELETE' }
+    );
+  }
+
+  async getDlqMessages(processorName: string, count: number = 100) {
+    return this.request<{ messages: DLQMessage[]; totalInQueue: number; processorName: string }>(
+      `/queues/${encodeURIComponent(processorName)}/dlq/messages?count=${count}`
+    );
+  }
+
+  async getRetryMessages(processorName: string, count: number = 100) {
+    return this.request<{ messages: DLQMessage[]; totalInQueue: number; processorName: string }>(
+      `/queues/${encodeURIComponent(processorName)}/retry/messages?count=${count}`
     );
   }
 

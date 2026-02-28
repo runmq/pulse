@@ -3,29 +3,34 @@
 import { useState } from 'react';
 import { api } from '@/lib/api';
 import { formatNumber } from '@/lib/utils';
+import { useToast } from '@/contexts/ToastContext';
 
 interface Props {
   processorName: string;
   messageCount: number;
   shovelPluginEnabled: boolean;
+  disabled?: boolean;
+  onReprocess?: () => void;
 }
 
-export default function ReprocessDLQButton({ processorName, messageCount, shovelPluginEnabled }: Props) {
+export default function ReprocessDLQButton({ processorName, messageCount, shovelPluginEnabled, disabled: externalDisabled, onReprocess }: Props) {
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const toast = useToast();
 
-  const disabled = !shovelPluginEnabled || messageCount === 0;
+  const disabled = !shovelPluginEnabled || messageCount === 0 || externalDisabled;
 
   const handleReprocess = async () => {
     if (disabled) return;
     setLoading(true);
-    setSuccess(false);
     try {
       await api.reprocessDlq(processorName);
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 3000);
-    } catch {
-      // handled silently
+      toast.success(`Reprocessing ${formatNumber(messageCount)} DLQ message${messageCount !== 1 ? 's' : ''}`);
+      onReprocess?.();
+    } catch (err: unknown) {
+      const msg = err && typeof err === 'object' && 'message' in err
+        ? String((err as { message: string }).message)
+        : 'Failed to reprocess DLQ';
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -35,7 +40,7 @@ export default function ReprocessDLQButton({ processorName, messageCount, shovel
     <div className="flex items-center justify-between py-3">
       <div>
         <p className="text-sm font-medium">Reprocess DLQ</p>
-        <p className="text-xs text-gray-500 dark:text-[#636E7E]">
+        <p className="text-xs text-muted-foreground">
           {!shovelPluginEnabled
             ? 'RabbitMQ shovel plugin is not enabled'
             : messageCount > 0
@@ -46,9 +51,9 @@ export default function ReprocessDLQButton({ processorName, messageCount, shovel
       <button
         onClick={handleReprocess}
         disabled={loading || disabled}
-        className="text-sm h-8 px-3 rounded-md bg-foreground text-background font-medium transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed hover:opacity-90 active:scale-[0.97]"
+        className="text-sm h-8 px-3 rounded-md bg-foreground text-background font-medium transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 active:scale-[0.97]"
       >
-        {loading ? 'Processing...' : success ? 'Started' : 'Reprocess'}
+        {loading ? 'Processing...' : 'Reprocess'}
       </button>
     </div>
   );

@@ -8,18 +8,22 @@ import { api } from '@/lib/api';
 import { QueueSummary } from '@/types/queue';
 import Navbar from '@/components/layout/Navbar';
 import QueueCard from '@/components/queue/QueueCard';
-import { Loader2, RefreshCw } from 'lucide-react';
+import RefreshSelect from '@/components/ui/RefreshSelect';
+import { useRefreshInterval } from '@/hooks/useRefreshInterval';
+import { Loader2 } from 'lucide-react';
 
 export default function QueuesPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
+
+  const { intervalSeconds, refreshInterval, setIntervalSeconds } = useRefreshInterval();
 
   const {
     data: queues,
     error,
     isLoading,
     mutate,
-  } = useSWR<QueueSummary[]>(user ? '/queues' : null, () => api.getQueues());
+  } = useSWR<QueueSummary[]>(user ? '/queues' : null, () => api.getQueues(), { refreshInterval });
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -44,19 +48,17 @@ export default function QueuesPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight">Queues</h1>
-            <p className="text-sm text-gray-500 dark:text-[#636E7E] mt-0.5">
+            <p className="text-sm text-muted-foreground mt-0.5">
               Monitor and manage your message queues
             </p>
           </div>
 
-          <button
-            onClick={() => mutate()}
-            className="glass-button flex items-center gap-2 text-sm h-9 px-3"
-            disabled={isLoading}
-          >
-            <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? 'animate-spin' : ''}`} />
-            Refresh
-          </button>
+          <RefreshSelect
+            intervalSeconds={intervalSeconds}
+            onIntervalChange={setIntervalSeconds}
+            onRefresh={() => mutate()}
+            loading={isLoading}
+          />
         </div>
 
         {/* Loading */}
@@ -79,7 +81,7 @@ export default function QueuesPage() {
         {queues && queues.length === 0 && (
           <div className="glass-card p-12 text-center">
             <p className="text-base font-medium mb-1">No queues found</p>
-            <p className="text-sm text-gray-500 dark:text-[#636E7E]">
+            <p className="text-sm text-muted-foreground">
               No RunMQ-managed queues detected in your RabbitMQ instance.
             </p>
           </div>
