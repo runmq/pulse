@@ -59,6 +59,14 @@ docker compose exec backend node scripts/create-user.js admin yourPassword admin
 
 5. Open [http://localhost:3000](http://localhost:3000) to start managing your queues
 
+## Pulse vs. your service config — who wins?
+
+Pulse's runtime controls (toggling retries, toggling DLQ routing, changing retry delay) are designed for **live incidents and on-the-fly tuning** — adjusting queue behavior without redeploying. The changes are written as RabbitMQ policies/bindings, so they take effect immediately.
+
+However, **your services are the source of truth.** They are not aware of changes made via Pulse, and the next time a service starts up RunMQ asserts the topology described in your processor configuration — any drift introduced from Pulse will be overwritten by the deployed config.
+
+Treat Pulse changes as temporary. Once the incident is resolved, fold the new values back into your processor configuration and redeploy.
+
 ## Development
 
 To run without Docker:
